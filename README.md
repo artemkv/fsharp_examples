@@ -1,6 +1,6 @@
 # map
 
-```
+```fsharp
 // Hint: think what map does to the List<T>
 // (map calls function ('a -> 'a) on every item of the list and produces a new list)
 // List<T>.map: (f (x : 'a) : 'b) 'a list -> 'b list
@@ -34,7 +34,7 @@ module MessageTest =
 
 # lift2
 
-```
+```fsharp
 module Message =
     type Message<'a> = Message of 'a
 
@@ -59,7 +59,7 @@ module MessageTest =
 
 # bind
 
-```
+```fsharp
 // Hint: think flatMap
 
 let parseInt str =
@@ -83,7 +83,7 @@ Some "75"
 
 # apply
 
-```
+```fsharp
 let exec action person =
     sprintf "%s %s!" action person
 
