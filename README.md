@@ -1,9 +1,20 @@
 # map
 
 ```fsharp
-// Hint: think what map does to the List<T>
-// (map calls function ('a -> 'a) on every item of the list and produces a new list)
-// List<T>.map: (f (x : 'a) : 'b) 'a list -> 'b list
+// Hint: think what map does to 'a list
+// (map calls function ('a -> 'b) on every item of the list and produces a new list)
+// So if you defined List.map it would be something like:
+//     let map (f (x : 'a) : 'b) 'a list : 'b list = ...
+//
+// Now forget about the list and focus only on the type signatures.
+// Specifically, FORGET THAT LIST IS A COLLECTION, and focus only on the fact that it combines 2 things:
+//     1. value(s) of type 'a
+//     2. the box that holds the value(s) of type 'a
+// Think of 'a list as a specific case of a generic type 'a something (e.g. 'a option).
+// Thinking this way, what does map do?
+//     - knows how to open the box and get values of type 'a
+//     - transforms values from 'a to 'b
+//     - puts the resulting items in the box again
 
 module Message =
     type Message<'a> = Message of 'a
@@ -35,6 +46,9 @@ module MessageTest =
 # lift2
 
 ```fsharp
+// Hint: map is simply lift1
+// Now take map and add an extra argument - you get lift2
+
 module Message =
     type Message<'a> = Message of 'a
 
@@ -61,6 +75,12 @@ module MessageTest =
 
 ```fsharp
 // Hint: think flatMap
+// Think of times when you try to use map on the list, an realize your mapping function returns list.
+// Now you end up with list of lists. Instead you want all returned lists to be flattened in a single list.
+// List.flatMap: (f (x : 'a) : 'b list) 'a list -> 'b list
+//
+// Now, the same as with map, forget about the list and focus on the signature.
+// Think of 'a list as a specific case of a generic type 'a something (e.g. 'a option).
 
 let parseInt str =
     match System.Int32.TryParse str with
