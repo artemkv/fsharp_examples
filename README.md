@@ -133,6 +133,18 @@ Some "75"
 # apply
 
 ```fsharp
+let map f argsopt =
+    match argsopt with
+    | Some args -> Some (f args)
+    | None -> None
+
+let apply fOpt argsOpt =
+    match fOpt, argsOpt with
+    | Some f, Some args -> Some (f args)
+    | Some _, None -> None
+    | None, Some _ -> None
+    | None, None -> None
+
 let getCustomerFirstName id =
     match id with
     | 123 -> Some "John"
@@ -146,18 +158,6 @@ let getCustomerLastName id =
 let getFullName firstName lastName =
     sprintf "%s %s" firstName lastName
 
-let map f argsopt =
-    match argsopt with
-    | Some args -> Some (f args)
-    | None -> None
-
-let apply fOpt argsOpt =
-    match fOpt, argsOpt with
-    | Some f, Some args -> Some (f args)
-    | Some _, None -> None
-    | None, Some _ -> None
-    | None, None -> None
-
 let partiallyApplied =
     getCustomerFirstName 123 |> map getFullName
 
@@ -168,6 +168,7 @@ let finalResult =
 let (<!>) = map
 let (<*>) = apply
 
+// The same result in one line
 let result =
     getFullName <!> getCustomerFirstName 123 <*> getCustomerLastName 123
 
