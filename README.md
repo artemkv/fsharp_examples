@@ -1,4 +1,4 @@
-# Shortest and simplest code examples that demonstrate map, lift2, bind and apply
+# My attempt on shortest and simplest code examples that demonstrate map, lift2, bind and apply
 
 # map
 
