@@ -1,6 +1,6 @@
 # My attempt on shortest and simplest code examples that demonstrate map, lift2, bind and apply
 
-# map
+# map (lift1)
 
 ```fsharp
 // Hint: think what map does to 'a list
