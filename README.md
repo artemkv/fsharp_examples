@@ -11,7 +11,7 @@ let rec map f alist =
     | [] -> []
     | head :: tail -> f head :: map f tail
 
-let square x : int =
+let square (x : int) =
     x * x
 
 let numbers = [ 1; 2; 3 ]
@@ -19,6 +19,7 @@ let numbers = [ 1; 2; 3 ]
 // Produces [ 1; 4; 9 ]
 let squares =
     numbers |> map square
+
 
 // Now forget about the list and focus only on the type signatures
 // Specifically, FORGET THAT LIST IS A COLLECTION, 
@@ -44,10 +45,12 @@ let shout (msg : string) =
 let exclaim (msg : string) =
     sprintf "%s!" msg
 
-let (Message result) = 
+let msg = 
     Message "hello world"
     |> map shout
     |> map (exclaim >> exclaim >> exclaim)
+
+let (Message result) = msg
 
 // "Result is HELLO WORLD!!!"
 printfn "Result is %s" result
@@ -68,11 +71,13 @@ let lift2 f arg1 arg2 =
 let concat suffix prefix =
     sprintf "%s%s" prefix suffix
 
-let (Message result) = 
+let msg =
     Message "Hello"
     |> lift2 concat (Message ", ")
     |> lift2 concat (Message "world")
     |> lift2 concat (Message "!")
+    
+let (Message result) = msg
         
 // "Result is Hello, world!"
 printfn "Result is %s" result
@@ -86,20 +91,35 @@ printfn "Result is %s" result
 // and realize your mapping function also returns list.
 // Now you end up with list of lists.
 // Instead you want all returned lists to be flattened in a single final list.
-// So if you defined List.flatMap it would be something like:
-//     let flatMap: (f (x : 'a) : 'b list) 'a list : 'b list = ...
-//
-// Now, the same as with map, forget about the list is a collection and focus on the signatures.
 
-let parseInt str =
-    match System.Int32.TryParse str with
-    | (true, x) -> Some x
-    | _ -> None
+let rec bind f alist =
+    match alist with
+    | [] -> []
+    | head :: tail -> f head @ bind f tail
+
+let dup (x : int) =
+    [ x; x ]
+
+let numbers = [ 1; 2; 3 ]
+
+// Produces [1; 1; 2; 2; 3; 3]
+// With map it would have been [[1; 1]; [2; 2]; [3; 3]]
+let duplicated =
+    numbers |> bind dup
+
+
+// Now, the same as with map, forget about the list is a collection 
+// and focus on the signatures.
 
 let bind f args  =
     match args with
     | Some x -> f x
     | None -> None
+
+let parseInt str =
+    match System.Int32.TryParse str with
+    | (true, x) -> Some x
+    | _ -> None
 
 // with map it would produce int option option
 // with bind it produces int option
