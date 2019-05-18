@@ -16,31 +16,25 @@
 //     - transforms values from 'a to 'b
 //     - puts the resulting items in the box again
 
-module Message =
-    type Message<'a> = Message of 'a
+type 'a Message = Message of 'a
 
-    let map f args =
-        match args with
-        | Message x -> Message (f x)
+let map f args =
+    match args with
+    | Message x -> Message (f x)
 
-    let returnMessage x =
-        Message x
+let shout (msg : string) = 
+    msg.ToUpper()
 
-open Message
-module MessageTest =
-    let shout (msg : string) = 
-        msg.ToUpper()
+let exclaim (msg : string) =
+    sprintf "%s!" msg
 
-    let exclaim (msg : string) =
-        sprintf "%s!" msg
+let (Message result) = 
+    Message "hello world"
+    |> map shout
+    |> map (exclaim >> exclaim >> exclaim)
 
-    let (Message result) = 
-        Message.returnMessage "hello world"
-        |> Message.map shout
-        |> Message.map (exclaim >> exclaim >> exclaim)
-
-    // "Result is HELLO WORLD!!!"
-    printfn "Result is %s" result
+// "Result is HELLO WORLD!!!"
+printfn "Result is %s" result
 ```
 
 # lift2
