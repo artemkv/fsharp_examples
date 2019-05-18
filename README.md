@@ -66,12 +66,12 @@ printfn "Result is %s" result
 
 ```fsharp
 // Hint: think flatMap
-// Think of times when you try to use map on the list, an realize your mapping function returns list.
-// Now you end up with list of lists. Instead you want all returned lists to be flattened in a single list.
-// List.flatMap: (f (x : 'a) : 'b list) 'a list -> 'b list
+// Think of times when you try to use map on the list, an realize your mapping function also returns list.
+// Now you end up with list of lists. Instead you want all returned lists to be flattened in a single final list.
+// So if you defined List.flatMap it would be something like:
+//     let flatMap: (f (x : 'a) : 'b list) 'a list : 'b list = ...
 //
-// Now, the same as with map, forget about the list and focus on the signature.
-// Think of 'a list as a specific case of a generic type 'a something (e.g. 'a option).
+// Now, the same as with map, forget about the list is a collection and focus on the signatures.
 
 let parseInt str =
     match System.Int32.TryParse str with
@@ -83,12 +83,10 @@ let bind f args  =
     | Some x -> f x
     | None -> None
 
-"45"
-|> parseInt 
-|> Option.iter (printfn "Result is %d")
-
+// with map it would produce int option option
+// with bind it produces int option
 Some "75"
-|> bind parseInt // That is all bind does
+|> bind parseInt 
 |> Option.iter (printfn "Result is %d")
 ```
 
