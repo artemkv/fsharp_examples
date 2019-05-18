@@ -43,26 +43,23 @@ printfn "Result is %s" result
 // Hint: map is simply lift1
 // Now take map and add an extra argument - you get lift2
 
-module Message =
-    type Message<'a> = Message of 'a
+type 'a message = Message of 'a
 
-    let lift2 f arg1 arg2 =
-        match arg1, arg2 with
-        | Message x, Message y -> Message (f x y)
+let lift2 f arg1 arg2 =
+    match arg1, arg2 with
+    | Message x, Message y -> Message (f x y)
 
-open Message
-module MessageTest =
-    let concat suffix prefix =
-        sprintf "%s%s" prefix suffix
+let concat suffix prefix =
+    sprintf "%s%s" prefix suffix
 
-    let (Message result) = 
-        Message "Hello"
-        |> lift2 concat (Message ", ")
-        |> lift2 concat (Message "world")
-        |> lift2 concat (Message "!")
+let (Message result) = 
+    Message "Hello"
+    |> lift2 concat (Message ", ")
+    |> lift2 concat (Message "world")
+    |> lift2 concat (Message "!")
         
-    // "Result is Hello, world!"
-    printfn "Result is %s" result
+// "Result is Hello, world!"
+printfn "Result is %s" result
 ```
 
 # bind
