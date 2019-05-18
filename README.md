@@ -122,15 +122,9 @@ let apply fOpt argsOpt =
     | None, Some args -> None
     | None, None -> None
 
-// This time you can just map, 
-// but notice you didn't have all arguments
-// so instead of final result, you got partially applied functions
 let partiallyApplied =
     getCustomerFirstName 123 |> map getFullName
 
-// Now you cannot map anymore because 
-// partionally applied on optional type,
-// functions become optional too. It's contagious
 let finalResult = 
     getCustomerLastName 123 |> apply partiallyApplied
 
@@ -138,11 +132,11 @@ let finalResult =
 let (<!>) = map
 let (<*>) = apply
 
+// The same thing in a more concise way
 let result =
     getFullName <!> getCustomerFirstName 123 <*> getCustomerLastName 123
 
 // "Result is John Smith"
-match result with
-| Some x -> printfn "Result is %s" x
-| None -> printfn "Nothing"
+result 
+|> Option.iter (printfn "Result is %s")
 ```
