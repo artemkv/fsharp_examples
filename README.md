@@ -29,8 +29,8 @@ let squares =
 // when you have type 'a something (e.g. 'a option).
 // Thinking this way, what does map do?
 //     - knows how to open the box and get values of type 'a
-//     - calls the transformer function on 'a to get 'b
-//     - puts the resulting items in the box again
+//     - calls the transformer function on values of 'a to get values of 'b
+//     - puts the resulting items in the [same kind of] box again
 
 type 'a message = Message of 'a
 
