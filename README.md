@@ -5,14 +5,27 @@
 ```fsharp
 // Hint: think what map does to 'a list
 // (map calls function ('a -> 'b) on every item of the list and produces a new list)
-// So if you defined List.map it would be something like:
-//     let map (f (x : 'a) : 'b) 'a list : 'b list = ...
-//
-// Now forget about the list and focus only on the type signatures.
-// Specifically, FORGET THAT LIST IS A COLLECTION, and focus only on the fact that it combines 2 things:
+
+let rec map f alist =
+    match alist with
+    | [] -> []
+    | head :: tail -> f head :: map f tail
+
+let square x : int =
+    x * x
+
+let numbers = [ 1; 2; 3 ]
+
+let squares =
+    numbers |> map square
+
+// Now forget about the list and focus only on the type signatures
+// Specifically, FORGET THAT LIST IS A COLLECTION, 
+// and focus only on the fact that it combines 2 things:
 //     1. value(s) of type 'a
 //     2. the box that holds the value(s) of type 'a
-// Think of 'a list as a specific case of a generic type 'a something (e.g. 'a option).
+// Think of 'a list as a specific case of a more generic case,
+// when you have type 'a something (e.g. 'a option).
 // Thinking this way, what does map do?
 //     - knows how to open the box and get values of type 'a
 //     - calls the transformer function on 'a to get 'b
