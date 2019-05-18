@@ -19,8 +19,9 @@ let numbers = [ 1; 2; 3 ]
 // Produces [ 1; 4; 9 ]
 let squares =
     numbers |> map square
+```
 
-
+```fsharp
 // Now forget about the list and focus only on the type signatures
 // Specifically, FORGET THAT LIST IS A COLLECTION, 
 // and focus only on the fact that it combines 2 things:
@@ -106,8 +107,9 @@ let numbers = [ 1; 2; 3 ]
 // With map it would have been [[1; 1]; [2; 2]; [3; 3]]
 let duplicated =
     numbers |> bind dup
+```
 
-
+```fsharp
 // Now, the same as with map, forget about the list is a collection 
 // and focus on the signatures.
 
