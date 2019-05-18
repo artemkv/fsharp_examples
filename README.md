@@ -15,7 +15,7 @@
 // Think of 'a list as a specific case of a generic type 'a something (e.g. 'a option).
 // Thinking this way, what does map do?
 //     - knows how to open the box and get values of type 'a
-//     - transforms values from 'a to 'b
+//     - calls the transformer function on 'a to get 'b
 //     - puts the resulting items in the box again
 
 type 'a message = Message of 'a
