@@ -1,3 +1,5 @@
+# Shortest and simplest code examples that demonstrate map, lift2, bind and apply
+
 # map
 
 ```fsharp
