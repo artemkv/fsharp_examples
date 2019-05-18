@@ -16,6 +16,7 @@ let square x : int =
 
 let numbers = [ 1; 2; 3 ]
 
+// Produces [ 1; 4; 9 ]
 let squares =
     numbers |> map square
 
