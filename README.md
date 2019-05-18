@@ -154,8 +154,8 @@ let map f argsopt =
 let apply fOpt argsOpt =
     match fOpt, argsOpt with
     | Some f, Some args -> Some (f args)
-    | Some f, None -> None
-    | None, Some args -> None
+    | Some _, None -> None
+    | None, Some _ -> None
     | None, None -> None
 
 let partiallyApplied =
@@ -168,7 +168,6 @@ let finalResult =
 let (<!>) = map
 let (<*>) = apply
 
-// The same thing in a more concise way
 let result =
     getFullName <!> getCustomerFirstName 123 <*> getCustomerLastName 123
 
