@@ -16,7 +16,7 @@
 //     - transforms values from 'a to 'b
 //     - puts the resulting items in the box again
 
-type 'a Message = Message of 'a
+type 'a message = Message of 'a
 
 let map f args =
     match args with
