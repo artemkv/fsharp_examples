@@ -68,8 +68,10 @@ printfn "Result is %s" result
 
 ```fsharp
 // Hint: think flatMap
-// Think of times when you try to use map on the list, an realize your mapping function also returns list.
-// Now you end up with list of lists. Instead you want all returned lists to be flattened in a single final list.
+// Think of times when you try to use map on the list, 
+// and realize your mapping function also returns list.
+// Now you end up with list of lists.
+// Instead you want all returned lists to be flattened in a single final list.
 // So if you defined List.flatMap it would be something like:
 //     let flatMap: (f (x : 'a) : 'b list) 'a list : 'b list = ...
 //
@@ -95,38 +97,52 @@ Some "75"
 # apply
 
 ```fsharp
-let exec action person =
-    sprintf "%s %s!" action person
+let getCustomerFirstName id =
+    match id with
+    | 123 -> Some "John"
+    | _ -> None
 
-let actions = [ "kick"; "kiss" ]
-let people = [ "Bill"; "Mary"; "Samantha" ]
+let getCustomerLastName id =
+    match id with
+    | 123 -> Some "Smith"
+    | _ -> None
 
-// apply [f; g] [x; y] produces [ f x; f y; g x; g y ]
-let rec apply flist xlist = 
-    match flist with
-    | [] -> []
-    | head :: tail -> (xlist |> List.map head) @ (apply tail xlist)
+let getFullName firstName lastName =
+    sprintf "%s %s" firstName lastName
 
-// Convenient way allows infix notation
+let map f argsopt =
+    match argsopt with
+    | Some args -> Some (f args)
+    | None -> None
+
+let apply fOpt argsOpt =
+    match fOpt, argsOpt with
+    | Some f, Some args -> Some (f args)
+    | Some f, None -> None
+    | None, Some args -> None
+    | None, None -> None
+
+// This time you can just map, 
+// but notice you didn't have all arguments
+// so instead of final result, you got partially applied functions
+let partiallyApplied =
+    getCustomerFirstName 123 |> map getFullName
+
+// Now you cannot map anymore because 
+// partionally applied on optional type,
+// functions become optional too. It's contagious
+let finalResult = 
+    getCustomerLastName 123 |> apply partiallyApplied
+
+// This is just a syntactic sugar
+let (<!>) = map
 let (<*>) = apply
-let (<!>) = List.map
 
-// We have to lift function (put in a list) before we can apply
-[exec] <*> actions <*> people
-    |> List.iter (printfn "%s")
+let result =
+    getFullName <!> getCustomerFirstName 123 <*> getCustomerLastName 123
 
-printfn "****"
-
-// We notice that if we first map, 
-// then we end up with the list, so no need to lift anymore
-actions |> List.map exec <*> people
-    |> List.iter (printfn "%s")
-
-printfn "****"
-
-// And now final version 
-// that justifies the whole pain of going through this example
-exec <!> actions <*> people
-    |> List.iter (printfn "%s")
-
+// "Result is John Smith"
+match result with
+| Some x -> printfn "Result is %s" x
+| None -> printfn "Nothing"
 ```
