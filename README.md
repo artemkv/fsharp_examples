@@ -46,8 +46,8 @@ let shout (msg : string) =
 let exclaim (msg : string) =
     sprintf "%s!" msg
 
-// Now we can chain trasformations of the internal value
-// Using the functions that know nothing about the "wrapping" type.
+// PROFIT: Now we can chain trasformations of the internal value
+// using the functions that know nothing about the "wrapping" type.
 let msg = 
     Message "hello world"
     |> map shout
@@ -74,9 +74,9 @@ let lift2 f arg1 arg2 =
 let concat suffix prefix =
     sprintf "%s%s" prefix suffix
 
-// We can still happily chain methods.
+// PROFIT: we continue happily chain methods.
 // Notice that if the second argument wasn't "Message x" but simply "x",
-// we could just partially apply concat and use map.
+// we could just partially apply concat and just use map.
 let msg =
     Message "Hello"
     |> lift2 concat (Message ", ")
@@ -159,6 +159,10 @@ let getCustomer id =
     match id with
     | 123 -> Some { FirstName = "John"; LastName = "Smith" }
     | _ -> None
+
+// PROFIT: chain methods if they continue returning success
+// Short-circuit to None when the first method in the chain
+// returns None
 
 let resultGood = 
     Some "123"
