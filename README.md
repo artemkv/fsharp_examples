@@ -47,7 +47,7 @@ let exclaim (msg : string) =
     sprintf "%s!" msg
 
 // Now we can chain trasformations of the internal value
-// Using the functions that know nothing about the 'wrapping' type.
+// Using the functions that know nothing about the "wrapping" type.
 let msg = 
     Message "hello world"
     |> map shout
@@ -75,7 +75,7 @@ let concat suffix prefix =
     sprintf "%s%s" prefix suffix
 
 // We can still happily chain methods.
-// Notice that if the second argument wasn't 'Message x' but simply 'x',
+// Notice that if the second argument wasn't "Message x" but simply "x",
 // we could just partially apply concat and use map.
 let msg =
     Message "Hello"
