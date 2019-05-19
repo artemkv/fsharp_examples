@@ -74,6 +74,9 @@ let lift2 f arg1 arg2 =
 let concat suffix prefix =
     sprintf "%s%s" prefix suffix
 
+// We can still happily chain methods.
+// Notice that if the second argument wasn't 'Message x' but simply 'x',
+// we could just partially apply concat and use map.
 let msg =
     Message "Hello"
     |> lift2 concat (Message ", ")
