@@ -215,8 +215,9 @@ let resultBad1 = getCustomerResponse "aaa"
 
 ```fsharp
 // Apply allows another technique.
-// I could not come up with any explanation in plain English yet,
-// But here's example:
+// It allows to pass multiple "wrapped" arguments to the function
+// that expects "unwrapped" arguments in a way that looks
+// almost like a "normal" function call.
 
 let map f argsopt =
     match argsopt with
@@ -253,7 +254,10 @@ let finalResult =
 let (<!>) = map
 let (<*>) = apply
 
-// The same result in one line
+// Now we can achieve a one-liner, that looks almost 
+// like a "normal" function call
+// If any of the arguments is None, the function is never called.
+// But EVERY argument is evaluated.
 let result =
     getFullName <!> getCustomerFirstName 123 <*> getCustomerLastName 123
 
