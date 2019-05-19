@@ -130,9 +130,73 @@ Some "75"
 |> Option.iter (printfn "Result is %d")
 ```
 
+```fsharp
+// Speaking of practical application,
+// bind has a very useful property: it can chain functions that return
+// wrapped type, the same way map can chain functions that return 
+// unwrapped type.
+// This allows "Railway Oriented Programming" with Option and Result.
+// Basically that means that if any function in the chain returns None/Failure,
+// The whole chain is short-circuited and the whole expression returns None/Failure.
+
+let bind f args  =
+    match args with
+    | Some x -> f x
+    | None -> None
+
+type Customer = { FirstName : string; LastName : string }
+
+let parseInt str =
+    match System.Int32.TryParse str with
+    | (true, x) -> Some x
+    | _ -> None
+
+let getCustomer id =
+    match id with
+    | 123 -> Some { FirstName = "John"; LastName = "Smith" }
+    | _ -> None
+
+let resultGood = 
+    Some "123"
+    |> bind parseInt
+    |> bind getCustomer
+
+let resultBad = 
+    Some "aaa"
+    |> bind parseInt
+    |> bind getCustomer
+```
+
+```fsharp
+// Maybe builder uses bind internally to re-write the previous expressions
+// in a way that looks like "a normal program". Well, kind of
+
+type MaybeBuilder() =
+    member this.Bind(x, f) = bind f x
+    member this.Return(x) = Some x
+
+let maybe = MaybeBuilder()
+
+// Imagine this is a controller method that takes idStr from url,
+// so sometimes it is present, sometimes it is not
+let get idStr =
+    maybe {
+        let! id = parseInt idStr
+        let! cust = getCustomer id
+        return cust
+    }
+
+let resultGood1 = get "123"
+let resultBad1 = get "aaa"
+```
+
 # apply
 
 ```fsharp
+// Apply allows another technique.
+// I could not come up with any explanation in plain English yet,
+// But here's example:
+
 let map f argsopt =
     match argsopt with
     | Some args -> Some (f args)
