@@ -46,6 +46,8 @@ let shout (msg : string) =
 let exclaim (msg : string) =
     sprintf "%s!" msg
 
+// Now we can chain trasformations of the internal value
+// Using the functions that know nothing about the 'wrapping' type.
 let msg = 
     Message "hello world"
     |> map shout
