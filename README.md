@@ -136,13 +136,12 @@ Some "75"
 ```
 
 ```fsharp
-// Speaking of practical application,
-// bind has a very useful property: it can chain functions that return
-// wrapped type, the same way map can chain functions that return 
-// unwrapped type.
-// This allows "Railway Oriented Programming" with Option and Result.
-// Basically that means that if any function in the chain returns None/Failure,
-// The whole chain is short-circuited and the whole expression returns None/Failure.
+// Speaking of practical application, bind has a very useful property:
+// it can chain functions that return "wrapped" type, the same way map 
+// can chain functions that return "unwrapped" type.
+// This allows "Railway Oriented Programming" when using Option/Result return types.
+// Basically that means that if any function in the chain of binds returns None/Failure,
+// the whole chain is short-circuited and the whole expression returns None/Failure.
 
 let bind f args  =
     match args with
@@ -167,14 +166,32 @@ let resultGood =
     |> bind getCustomer
 
 let resultBad = 
-    Some "aaa"
+    None
     |> bind parseInt
     |> bind getCustomer
 ```
 
 ```fsharp
-// Maybe builder uses bind internally to re-write the previous expressions
-// in a way that looks like "a normal program". Well, kind of
+// This property of bind is so powerful that it allows extending the language.
+// MaybeBuilder below uses bind internally to re-write the previous expressions
+// in a way that looks like "a normal program". Well, kind of.
+
+let bind f args  =
+    match args with
+    | Some x -> f x
+    | None -> None
+
+type Customer = { FirstName : string; LastName : string }
+
+let parseInt str =
+    match System.Int32.TryParse str with
+    | (true, x) -> Some x
+    | _ -> None
+
+let getCustomer id =
+    match id with
+    | 123 -> Some { FirstName = "John"; LastName = "Smith" }
+    | _ -> None
 
 type MaybeBuilder() =
     member this.Bind(x, f) = bind f x
@@ -182,17 +199,16 @@ type MaybeBuilder() =
 
 let maybe = MaybeBuilder()
 
-// Imagine this is a controller method that takes idStr from url,
-// so sometimes it is present, sometimes it is not
-let get idStr =
+let getCustomerResponse idStr =
     maybe {
+        // here there is a hidden bind call
         let! id = parseInt idStr
         let! cust = getCustomer id
         return cust
     }
 
-let resultGood1 = get "123"
-let resultBad1 = get "aaa"
+let resultGood1 = getCustomerResponse "123"
+let resultBad1 = getCustomerResponse "aaa"
 ```
 
 # apply
